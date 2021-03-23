@@ -1,30 +1,39 @@
 import React, { Component } from "react";
 import styles from "./Filter.module.css";
 import PropTypes from "prop-types";
-class Filter extends Component {
-  state = {
-    filter: "",
-  };
+import { connect } from "react-redux";
+import filterAction from "../../redux/actions/filterAction";
 
-  hamdleChange = (event) => {
-    this.setState({ [event.target.name]: event.target.value });
-    this.props.filterContact(event.target);
-  };
+const Filter = ({ filter, filterContact, contacts }) => {
+  // state = {
+  //   filter: "",
+  // };
 
-  render() {
-    return (
-      <input
-        className={styles.input}
-        onInput={this.hamdleChange}
-        placeholder="Find contacts by name"
-        name="filter"
-        type="text"
-      />
-    );
-  }
-}
+  // hamdleChange = (event) => {
+  //   this.setState({ [event.target.name]: event.target.value });
+  //   this.props.filterContact(event.target);
+  // };
 
-export default Filter;
+  // render() {
+  return (
+    <input
+      className={styles.input}
+      onChange={(event) => {
+        return filterContact(event.target.value);
+      }}
+      placeholder="Find contacts by name"
+      name="filter"
+      type="text"
+    />
+  );
+  // }
+};
+const mapStateToProps = (store) => {
+  console.log(store.filter);
+  return { filter: store.filter, contacts: store.contacts };
+};
+const mapDispatchToProps = { filterContact: filterAction.filterAction };
+export default connect(mapStateToProps, mapDispatchToProps)(Filter);
 
 Filter.propTypes = {
   filterContact: PropTypes.func.isRequired,

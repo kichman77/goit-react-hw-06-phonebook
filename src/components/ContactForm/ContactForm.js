@@ -2,66 +2,84 @@ import React, { Component } from "react";
 import styles from "./ContactForm.module.css";
 import { v4 as uuidv4 } from "uuid";
 import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import contactAction from "../../redux/actions/contactsAction";
+import Notification from "../Notification/Notification";
 
 class ContactForm extends Component {
+  static propTypes = { addContact: PropTypes.func.isRequired };
   state = {
     name: "",
     phone: "",
+    isExist: false,
   };
 
   handleChange = (event) => {
-    // console.log(event.target);
-    // console.log(event.target.value);
+    const { name, value } = event.target;
     this.setState({
-      [event.target.name]: event.target.value,
+      [name]: value,
     });
-    this.props.getValue(event.target);
+    // this.props.getValue(event.target);
   };
   handleSubmit = (event) => {
     event.preventDefault();
     const { name, phone } = this.state;
-    // if (name || phone) return;
-
+    const { contacts, addContact } = this.props;
     const contact = {
       id: uuidv4(),
       name,
       phone,
     };
-    this.props.addContact(contact);
+    const condition = contacts.find((elem) => {
+      console.log(elem.name);
+      return elem.name === contact.name;
+    });
+    console.log(condition);
+    if (condition) {
+      this.setState({ isExist: true });
+      setTimeout(() => this.setState({ isExist: false }), 2000);
+      return;
+    }
+    addContact(contact);
     this.setState({ name: "", phone: "" });
   };
   render() {
-    // console.log("state : ", this.state);
-    // console.log(this.props.addContact);
+    const { name, phone, isExist } = this.state;
+    const { handleSubmit, handleChange } = this;
     return (
-      <form className={styles.form} onSubmit={this.handleSubmit}>
-        <input
-          onChange={this.handleChange}
-          placeholder="name"
-          name="name"
-          type="text"
-          value={this.state.name}
-          required
-        />
-        <input
-          onChange={this.handleChange}
-          placeholder="phone number"
-          name="phone"
-          type="tel"
-          value={this.state.phone}
-          required
-        />
-        <button className={styles.btn} type="submit">
-          Add contact
-        </button>
-      </form>
+      <>
+        {isExist && <Notification />}
+        <form className={styles.form} onSubmit={handleSubmit}>
+          <input
+            onChange={handleChange}
+            placeholder="name"
+            name="name"
+            type="text"
+            value={name}
+            required
+          />
+          <input
+            onChange={handleChange}
+            placeholder="phone number"
+            name="phone"
+            type="tel"
+            value={phone}
+            required
+          />
+          <button className={styles.btn} type="submit">
+            Add contact
+          </button>
+        </form>
+      </>
     );
   }
 }
 
-export default ContactForm;
-
-ContactForm.propTypes = {
-  getValue: PropTypes.func.isRequired,
-  addContact: PropTypes.func.isRequired,
+const mapStateToProps = (store) => {
+  console.log(store);
+  const { contacts } = store;
+  return { contacts };
 };
+const mapDispatchToProps = { addContact: contactAction.addContact };
+
+export default connect(mapStateToProps, mapDispatchToProps)(ContactForm);

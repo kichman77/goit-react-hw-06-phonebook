@@ -1,13 +1,14 @@
 import React from "react";
 import styles from "./ContactList.module.css";
 import PropTypes from "prop-types";
-
-const ContactList = ({ contacts, handleDelete }) => {
+import { connect } from "react-redux";
+import contactAction from "../../redux/actions/contactsAction";
+const ContactList = ({ showContacts, handleDelete }) => {
   return (
     <>
-      {contacts && (
+      {showContacts && (
         <ul className={styles.list}>
-          {contacts.map((el) => {
+          {showContacts.map((el) => {
             return (
               <li
                 onClick={() => {
@@ -29,10 +30,21 @@ const ContactList = ({ contacts, handleDelete }) => {
   );
 };
 
-export default ContactList;
+const mapStateToProps = (store) => {
+  console.log(store);
+  const { contacts, filter } = store;
+  const filteredContacts = contacts.filter((contact) => {
+    return contact.name.toLowerCase().includes(filter);
+  });
+  return { showContacts: filteredContacts };
+};
+const mapDispatchToProps = {
+  handleDelete: contactAction.deleteContact,
+};
+export default connect(mapStateToProps, mapDispatchToProps)(ContactList);
 
 ContactList.propTypes = {
-  contacts: PropTypes.arrayOf(
+  showContacts: PropTypes.arrayOf(
     PropTypes.exact({
       id: PropTypes.string.isRequired,
       name: PropTypes.string.isRequired,
