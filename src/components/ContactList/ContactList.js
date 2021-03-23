@@ -34,7 +34,7 @@ const mapStateToProps = (store) => {
   console.log(store);
   const { contacts, filter } = store;
   const filteredContacts = contacts.filter((contact) => {
-    return contact.name.toLowerCase().includes(filter);
+    return contact.name.toLowerCase().includes(filter.toLowerCase());
   });
   return { showContacts: filteredContacts };
 };
