@@ -2,6 +2,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import contacts from "./redusers/contactsReducer";
 import filter from "./redusers/filterReducer";
+
 const store = configureStore({
   reducer: {
     contacts,

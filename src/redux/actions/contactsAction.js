@@ -12,6 +12,7 @@
 //   };
 // };
 // export default { addContact, deleteContact };
+
 import { createAction } from "@reduxjs/toolkit";
 import actionTypes from "../actionTypes";
 const addContact = createAction(actionTypes.ADD_CONTACT);

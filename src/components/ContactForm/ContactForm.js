@@ -19,8 +19,8 @@ class ContactForm extends Component {
     this.setState({
       [name]: value,
     });
-    // this.props.getValue(event.target);
   };
+
   handleSubmit = (event) => {
     event.preventDefault();
     const { name, phone } = this.state;
@@ -34,7 +34,7 @@ class ContactForm extends Component {
       console.log(elem.name);
       return elem.name === contact.name;
     });
-    console.log(condition);
+
     if (condition) {
       this.setState({ isExist: true });
       setTimeout(() => this.setState({ isExist: false }), 2000);
@@ -43,6 +43,7 @@ class ContactForm extends Component {
     addContact(contact);
     this.setState({ name: "", phone: "" });
   };
+
   render() {
     const { name, phone, isExist } = this.state;
     const { handleSubmit, handleChange } = this;
@@ -76,7 +77,6 @@ class ContactForm extends Component {
 }
 
 const mapStateToProps = (store) => {
-  console.log(store);
   const { contacts } = store;
   return { contacts };
 };

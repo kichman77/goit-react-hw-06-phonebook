@@ -3,6 +3,7 @@ import styles from "./ContactList.module.css";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import contactAction from "../../redux/actions/contactsAction";
+
 const ContactList = ({ showContacts, handleDelete }) => {
   return (
     <>
@@ -31,7 +32,6 @@ const ContactList = ({ showContacts, handleDelete }) => {
 };
 
 const mapStateToProps = (store) => {
-  console.log(store);
   const { contacts, filter } = store;
   const filteredContacts = contacts.filter((contact) => {
     return contact.name.toLowerCase().includes(filter.toLowerCase());
